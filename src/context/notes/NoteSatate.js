@@ -6,6 +6,7 @@ const NoteState = (props) => {
   const host = "http://localhost:5000";
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
+  
   //get note
   const getNote = async () => {
     //To do api call
@@ -14,13 +15,14 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQyY2ZkNTI0NjE2YjVkNDJlNTFiODk0In0sImlhdCI6MTY4MDg0NDEyOX0.ZTD9fN9j85FFlwIWRVxsTglc95qEPeYmX_saPsBvPVY",
+        "auth-token": localStorage.getItem('token')
       },
     });
     const json = await response.json()
-    
-    setNotes(json)
+    console.log(json);
+    if(!json.error){
+      setNotes(json)
+    }
   };
 
   // Add a Note
@@ -31,8 +33,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQyY2ZkNTI0NjE2YjVkNDJlNTFiODk0In0sImlhdCI6MTY4MDg0NDEyOX0.ZTD9fN9j85FFlwIWRVxsTglc95qEPeYmX_saPsBvPVY",
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -50,8 +51,7 @@ const NoteState = (props) => {
   
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQyY2ZkNTI0NjE2YjVkNDJlNTFiODk0In0sImlhdCI6MTY4MDg0NDEyOX0.ZTD9fN9j85FFlwIWRVxsTglc95qEPeYmX_saPsBvPVY",
+          "auth-token": localStorage.getItem('token')
         },
         
       });
@@ -70,8 +70,7 @@ const NoteState = (props) => {
 
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQyY2ZkNTI0NjE2YjVkNDJlNTFiODk0In0sImlhdCI6MTY4MDg0NDEyOX0.ZTD9fN9j85FFlwIWRVxsTglc95qEPeYmX_saPsBvPVY",
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -91,6 +90,7 @@ const NoteState = (props) => {
       }
       
     }
+    console.log(newNotes);
     setNotes(newNotes)
   };
   return (

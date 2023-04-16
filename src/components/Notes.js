@@ -3,13 +3,20 @@ import { useContext,useState } from "react";
 import noteContext from "../context/notes/NoteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
+import { useNavigate } from "react-router-dom";
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, getNote, editNote } = context;
+  let navigate = useNavigate();
   useEffect(() => {
     // eslint-disable-next-line
-    getNote();
+    if(localStorage.getItem('token')){
+      getNote();
+    }else{
+      navigate('/login');
+    }
+    
   }, []);
   const ref = useRef(null);
   const refClose =useRef(null)
@@ -17,11 +24,13 @@ const Notes = () => {
   const updateNote = (currentNote) => {
     ref.current.click();
     setNote({id:currentNote._id, etitle:currentNote.title,edescription:currentNote.description,etag:currentNote.tag})
+    
   };
   const handleClick=(e)=>{
     
     editNote(note.id, note.etitle,note.edescription,note.etag);
     refClose.current.click();
+    props.showAlert("Updated Successfully","success");
     
 }
 const onChange=(e)=>{
@@ -31,7 +40,7 @@ const onChange=(e)=>{
 
   return (
     <>
-      <AddNote />
+      <AddNote showAlert={props.showAlert} />
       <div>
         {/* Button trigger modal */}
         <button
@@ -134,11 +143,11 @@ const onChange=(e)=>{
 
       <div className="row my-3">
         <h2>Your Notes</h2>
-        {notes.length === 0 && <div className="container">No Notes To Display</div>}
-        {notes.map((note) => {
+        {notes?.length === 0 && <div className="container">No Notes To Display</div>}
+        {notes && notes.map((note) => {
           return (
-            <Noteitem key={note._id} updateNote={updateNote} note={note} />
-          );
+            <Noteitem key={note._id} updateNote={updateNote} note={note} showAlert={props.showAlert} />
+          )
         })}
       </div>
     </>
